@@ -8,11 +8,11 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>init.paintingsShop</groupId>
-	<artifactId>PaintingsShop</artifactId>
+	<groupId>init.jocDaus</groupId>
+	<artifactId>JocDaus</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PaintingsShop</name>
-	<description>Exercici M13 It Academy Francesc Nohales</description>
+	<name>JocDaus</name>
+	<description>Exercici M14 It Academy Francesc Nohales</description>
 
 	<properties>
 		<java.version>11</java.version>
