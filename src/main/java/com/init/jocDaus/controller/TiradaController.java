@@ -133,7 +133,7 @@ public class TiradaController {
 	
 	
 	
-	
+	 
 	
 	
 	
@@ -156,5 +156,54 @@ public class TiradaController {
 		} catch (Exception e) {
 		}
 		return lista;
+	}
+	/**
+	 * 9 - Postman Método que lista el player con peor % d'exits
+	 * 
+	 * @return List<Tirada> (GET /shops/{ID}/pictures).
+	 */
+	@GetMapping("/players/ranking/winner")
+	public Player pitjorporcen() {
+		Double winner;Double losser;
+		Double half;
+		Player pitjor= new Player();
+		List<Tirada> lista = new ArrayList<>();
+		
+		try {
+			for (Player player : playerServiceImpl.listPlayer()) {
+				winner=0.0;
+				losser=0.0;
+				half=0.0;
+				for (Tirada tirada : tiradaServiceImpl.listTirada()) {
+				if (tirada.getPlayer().equals(player)) {
+					if (tirada.isWin()) {
+						winner++;
+					}
+					else {
+						losser++;
+					}
+				}
+			}
+			half+=100*(double)(Math.round(winner/(winner+losser)*100d)/100d);
+			playerServiceImpl.savePlayer(player).setSuccess(half);
+		
+			}
+	//		List<Player> player1 = new ArrayList<>();
+	//		player1= playerServiceImpl.listPlayer();
+	
+			for (Player player : playerServiceImpl.listPlayer()) {
+				Double max=0.0;
+				Integer id;
+				 if (player.getSuccess()> max) {
+		                max = player.getSuccess();
+		                id=player.getId();
+		                pitjor=player;
+		            }
+			}
+			
+			
+		} catch (Exception e) {
+		}
+		return pitjor;
 	}
 }
