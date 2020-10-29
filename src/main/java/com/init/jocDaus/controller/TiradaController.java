@@ -1,6 +1,7 @@
 package com.init.jocDaus.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,11 +77,7 @@ public class TiradaController {
 		}
 		return new ResponseEntity<>("Tirada borrada", HttpStatus.OK);
 	}
-	
-	
-	
-	
-	
+
 	/**
 	 * 5 - Postman Método que lista todos los players con su % medio d'exits
 	 * 
@@ -88,55 +85,37 @@ public class TiradaController {
 	 */
 	@GetMapping("/players")
 	public List<Player> listMitjana() {
-		Double winner;Double losser;
+		Double winner;
+		Double losser;
 		Double half;
 		List<Tirada> lista = new ArrayList<>();
-		
+
 		try {
 			for (Player player : playerServiceImpl.listPlayer()) {
-				winner=0.0;
-				losser=0.0;
-				half=0.0;
+				winner = 0.0;
+				losser = 0.0;
+				half = 0.0;
 				for (Tirada tirada : tiradaServiceImpl.listTirada()) {
-				if (tirada.getPlayer().equals(player)) {
-					if (tirada.isWin()) {
-						winner++;
-					}
-					else {
-						losser++;
+					if (tirada.getPlayer().equals(player)) {
+						if (tirada.isWin()) {
+							winner++;
+						} else {
+							losser++;
+						}
 					}
 				}
+				half += 100 * (double) (Math.round(winner / (winner + losser) * 100d) / 100d);
+				player.setSuccess(half);
+				playerServiceImpl.savePlayer(player).setSuccess(half);
+
 			}
-			half+=100*(double)(Math.round(winner/(winner+losser)*100d)/100d);
-			playerServiceImpl.savePlayer(player).setSuccess(half);
-		
-			}
-			
+
 			return playerServiceImpl.listPlayer();
 		} catch (Exception e) {
 		}
 		return playerServiceImpl.listPlayer();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	 
-	
-	
-	
+
 	/**
 	 * 6 - Postman Método que lista las tiradas de un player introducido en la
 	 * petición
@@ -157,53 +136,132 @@ public class TiradaController {
 		}
 		return lista;
 	}
+
 	/**
-	 * 9 - Postman Método que lista el player con peor % d'exits
+	 * 7 - Postman Método que lista el  % medio d'exits
 	 * 
-	 * @return List<Tirada> (GET /shops/{ID}/pictures).
+	 * @return List<Tirada> (GET/players/ranking).
 	 */
-	@GetMapping("/players/ranking/winner")
-	public Player pitjorporcen() {
-		Double winner;Double losser;
+	@GetMapping("/players/ranking")
+	public Double ranking() {
+		Double winner;
+		Double losser;
 		Double half;
-		Player pitjor= new Player();
-		List<Tirada> lista = new ArrayList<>();
-		
+		Double mediageneral = 0.0;
+		//Player millor = new Player();
 		try {
-			for (Player player : playerServiceImpl.listPlayer()) {
-				winner=0.0;
-				losser=0.0;
-				half=0.0;
-				for (Tirada tirada : tiradaServiceImpl.listTirada()) {
-				if (tirada.getPlayer().equals(player)) {
-					if (tirada.isWin()) {
-						winner++;
-					}
-					else {
-						losser++;
+			for (Player player : playerServiceImpl.listPlayer()) { // Recorremos todos los jugadores
+				winner = 0.0;
+				losser = 0.0;
+				half = 0.0;
+				for (Tirada tirada : tiradaServiceImpl.listTirada()) { // Recorremos las tiradas acumulando ganadas y perdidas
+					if (tirada.getPlayer().equals(player)) {
+						if (tirada.isWin()) {
+							winner++;
+						} else {
+							losser++;
+						}
 					}
 				}
-			}
-			half+=100*(double)(Math.round(winner/(winner+losser)*100d)/100d);
-			playerServiceImpl.savePlayer(player).setSuccess(half);
-		
-			}
-	//		List<Player> player1 = new ArrayList<>();
-	//		player1= playerServiceImpl.listPlayer();
-	
-			for (Player player : playerServiceImpl.listPlayer()) {
-				Double max=0.0;
-				Integer id;
-				 if (player.getSuccess()> max) {
-		                max = player.getSuccess();
-		                id=player.getId();
-		                pitjor=player;
-		            }
+				// Se actualiza en campo Success con su porcentaje de exito
+				half += 100 * (double) (Math.round(winner / (winner + losser) * 100d) / 100d);
+				//player.setSuccess(half);
+				playerServiceImpl.savePlayer(player).setSuccess(half);
 			}
 			
+			Double suma = 0.0;
+			
+			for (Player player : playerServiceImpl.listPlayer()) {
+				suma=suma+player.getSuccess();
+				}
+				mediageneral=(double) (Math.round(suma / (playerServiceImpl.listPlayer().size()))*100d/100d);
 			
 		} catch (Exception e) {
 		}
+		return mediageneral;
+	}
+	/**
+	 *  * 8 - Postman Método que lista el player con peor % d'exits
+	 * 
+	 * @return List<Tirada> (GET /players/ranking/winner).
+	 */
+	@GetMapping("/players/ranking/loser")
+	public Player pitjorporcen() {
+		Double winner;
+		Double losser;
+		Double half;
+		Player pitjor = new Player();
+		try {
+			for (Player player : playerServiceImpl.listPlayer()) { // Recorremos todos los jugadores
+				winner = 0.0;
+				losser = 0.0;
+				half = 0.0;
+				for (Tirada tirada : tiradaServiceImpl.listTirada()) { // Recorremos las tiradas acumulando ganadas y perdidas
+					if (tirada.getPlayer().equals(player)) {
+						if (tirada.isWin()) {
+							winner++;
+						} else {
+							losser++;
+						}
+					}
+				}
+				// Se actualiza en campo Success con su porcentaje de exito
+				half += 100 * (double) (Math.round(winner / (winner + losser) * 100d) / 100d);
+				playerServiceImpl.savePlayer(player).setSuccess(half);
+			}
+			// Se busca el jugador con menor porcentaje de exito
+			Double maxi = 100.0;
+			for (Player player : playerServiceImpl.listPlayer()) {
+				
+				if (player.getSuccess() < maxi) {
+					maxi = player.getSuccess();
+					pitjor = player;
+				}
+			}
+		} catch (Exception e) {
+		}
 		return pitjor;
+	}
+	/**
+	 * 9 - Postman Método que lista el player con mejor % d'exits
+	 * 
+	 * @return List<Tirada> (GET/players/ranking/winner).
+	 */
+	@GetMapping("/players/ranking/winner")
+	public Player millorporcen() {
+		Double winner;
+		Double losser;
+		Double half;
+		Player millor = new Player();
+		try {
+			for (Player player : playerServiceImpl.listPlayer()) { // Recorremos todos los jugadores
+				winner = 0.0;
+				losser = 0.0;
+				half = 0.0;
+				for (Tirada tirada : tiradaServiceImpl.listTirada()) { // Recorremos las tiradas acumulando ganadas y perdidas
+					if (tirada.getPlayer().equals(player)) {
+						if (tirada.isWin()) {
+							winner++;
+						} else {
+							losser++;
+						}
+					}
+				}
+				// Se actualiza en campo Success con su porcentaje de exito
+				half += 100 * (double) (Math.round(winner / (winner + losser) * 100d) / 100d);
+				playerServiceImpl.savePlayer(player).setSuccess(half);
+			}
+			// Se busca el jugador con mayor porcentaje de exito
+			Double maxi = 0.0;
+			for (Player player : playerServiceImpl.listPlayer()) {
+				
+				if (player.getSuccess() > maxi) {
+					maxi = player.getSuccess();
+					millor = player;
+				}
+			}
+		} catch (Exception e) {
+		}
+		return millor;
 	}
 }

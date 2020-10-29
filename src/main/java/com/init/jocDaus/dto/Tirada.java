@@ -75,8 +75,9 @@ public class Tirada {
 		}else {
 			win=false;
 		}
-		
 	}
+		
+	
 	public Tirada(Integer id, Integer dau1, Integer dau2, boolean win,Player player) {
 		super();
 		this.id = id;
@@ -129,21 +130,12 @@ public class Tirada {
 		return null;
 	}
 
-	// Dice roll information
 	@Override
 	public String toString() {
 		return "Dice Roll [id = " + id + ", dau1 = " + dau1 + ", dau 2 = " + dau2 + ",  win =" + win + ", player = " + player
 				+ " ]";
 	}
 
-	// Check if dice roll was won (sum of dices must be 7 in order to win)
-	public boolean checkIfWon() {
-		int sum = dau1 + dau2;
-		if (sum == 7) {
-			win = true;
-		} else {
-			win = false;
-		}
-		return win;
-	}
+	
+
 }

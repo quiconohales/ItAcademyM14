@@ -29,6 +29,6 @@ public class JocDausApplication {
 //	ok 5 GET /players/: retorna el llistat de tots els jugadors del sistema amb el seu percentatge mig d’èxitsz
 //	ok 6 GET /players/{id}/games: retorna el llistat de jugades per un jugador.
 //	o GET /players/ranking: retorna el ranking mig de tots els jugadors del sistema. És a dir, el percentatge mig d’èxits.
-//	o GET /players/ranking/loser: retorna el jugador amb pitjor percentatge d’èxit
-//	o GET /players/ranking/winner: retorna el jugador amb pitjor percentatge d’èxit
+//	ok 8  GET /players/ranking/loser: retorna el jugador amb pitjor percentatge d’èxit
+//	ok 9 GET /players/ranking/winner: retorna el jugador amb millor percentatge d’èxit
 }
