@@ -50,13 +50,7 @@ public class Tirada {
 	@JsonIgnore
 	private Player player;
 	
-// 	quico	
-//	@JsonIgnore
-//	@JoinColumn(name="fk_player",nullable=false)
-//	@ManyToOne(optional = false,cascade = CascadeType.REMOVE,fetch = FetchType.LAZY)
-//	private Player player;
 
-	
 	// Contructores 
 	public Tirada() {
 		

@@ -70,17 +70,7 @@ public class PlayerController {
 		Player player = playerServiceImpl.getPlayer(id);
 		return player.getTirada();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	/**
      * Método que lista los jugadores  existentes
